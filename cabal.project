@@ -1,0 +1,4 @@
+packages: .
+
+package word8set
+  ghc-options: -Wall
