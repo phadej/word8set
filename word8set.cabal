@@ -1,6 +1,6 @@
 cabal-version:      3.0
 name:               word8set
-version:            0.1
+version:            0.1.1
 synopsis:           Word8 set
 description:        Set of Word8 numbers. Backed up by Word256.
 category:           Data
@@ -44,3 +44,21 @@ library
     , lattices    ^>=2.2
     , QuickCheck  ^>=2.14.2
     , wide-word   ^>=0.1.5.0
+
+test-suite word8set-tests
+  default-language: Haskell2010
+  type:             exitcode-stdio-1.0
+  hs-source-dirs:   tests
+  main-is:          word8set-tests.hs
+
+  -- library dependencies
+  build-depends:
+    , base
+    , lattices
+    , QuickCheck
+    , word8set
+
+  -- test dependencies
+  build-depends:
+    , tasty             ^>=1.4.3
+    , tasty-quickcheck  ^>=0.10.2

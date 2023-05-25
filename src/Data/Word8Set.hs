@@ -58,6 +58,7 @@ module Data.Word8Set (
     union,
     unions,
     difference,
+    symmetricDifference,
     (\\),
     intersection,
     complement,
@@ -106,11 +107,14 @@ import Prelude
        otherwise, return, showParen, showString, snd, ($), (&&), (+), (-), (.), (/=), (<=), (>))
 
 import Algebra.Lattice       (BoundedJoinSemiLattice (..), BoundedMeetSemiLattice (..), Lattice (..))
+import Algebra.Heyting (Heyting (..))
+import Algebra.PartialOrd (PartialOrd (..))
 import Control.DeepSeq       (NFData (..))
 import Data.Bits             ((.&.), (.|.))
 import Data.Char             (chr, ord)
 import Data.Monoid           (Monoid (..))
 import Data.Semigroup        (Semigroup (..))
+import Data.String           (IsString (..))
 import Data.WideWord.Word256 (Word256 (..))
 import Data.Word             (Word8)
 import Test.QuickCheck       (Arbitrary (..), CoArbitrary (..), Function (..), functionMap)
@@ -191,10 +195,30 @@ instance BoundedJoinSemiLattice Word8Set where
 instance BoundedMeetSemiLattice Word8Set where
     top = full
 
+-- |
+--
+-- @since 0.1.1
+instance Heyting Word8Set where
+    a ==> b = neg a \/ b 
+    neg     = complement
+    a <=> b = complement (symmetricDifference a b)
+
+-- | @'leq' = 'isSubsetOf'@
+--
+-- @since 0.1.1
+instance PartialOrd Word8Set where
+    leq = isSubsetOf
+
 instance GHC.Exts.IsList Word8Set where
   type Item Word8Set = Key
   fromList = fromList
   toList   = toList
+
+-- | @'fromString' = 'fromASCII'@
+--
+-- @since 0.1.1
+instance IsString Word8Set where
+    fromString = fromASCII
 
 -------------------------------------------------------------------------------
 -- Construction
@@ -494,6 +518,20 @@ intersection (W8S xs) (W8S ys) = W8S (xs .&. ys)
 -- | Difference between two sets.
 difference :: Word8Set -> Word8Set -> Word8Set
 difference xs ys = intersection xs (complement ys)
+
+-- | Symmetric difference between two sets
+--
+-- @
+-- 'symmetricDifference' xs ys = 'difference' ('union' xs ys) ('intersection' xs ys)
+-- @
+--
+-- >>> symmetricDifference (range 10 20) (range 15 25)
+-- fromList [10,11,12,13,14,21,22,23,24,25]
+--
+-- @since 0.1.1
+--
+symmetricDifference :: Word8Set -> Word8Set -> Word8Set
+symmetricDifference (W8S xs) (W8S ys) = W8S (Bits.xor xs ys)
 
 -- | See 'difference'.
 (\\) :: Word8Set -> Word8Set -> Word8Set
