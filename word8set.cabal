@@ -1,6 +1,6 @@
 cabal-version:      3.0
 name:               word8set
-version:            0.1.1
+version:            0.1.2
 synopsis:           Word8 set
 description:        Set of Word8 numbers. Backed up by Word256.
 category:           Data
@@ -13,16 +13,15 @@ license-file:       LICENSE
 build-type:         Simple
 extra-source-files: CHANGELOG.md
 tested-with:
-  GHC ==8.0.2
-   || ==8.2.2
-   || ==8.4.4
-   || ==8.6.5
+  GHC ==8.6.5
    || ==8.8.4
    || ==8.10.7
    || ==9.0.2
-   || ==9.2.7
-   || ==9.4.5
-   || ==9.6.1
+   || ==9.2.8
+   || ==9.4.8
+   || ==9.6.5
+   || ==9.8.2
+   || ==9.10.1
 
 source-repository head
   type:     git
@@ -35,15 +34,15 @@ library
 
   -- boot libraries
   build-depends:
-    , base              >=4.9     && <4.19
-    , deepseq           >=1.4.2.0 && <1.5
-    , template-haskell  >=2.11    && <2.21
+    , base              >=4.12.0.0 && <4.21
+    , deepseq           >=1.4.4.0  && <1.6
+    , template-haskell  >=2.11     && <2.23
 
   -- other dependencies
   build-depends:
-    , lattices    ^>=2.2
-    , QuickCheck  ^>=2.14.2
-    , wide-word   ^>=0.1.5.0
+    , lattices    ^>=2.2.1
+    , QuickCheck  ^>=2.14.2  || ^>=2.15
+    , wide-word   ^>=0.1.6.0
 
 test-suite word8set-tests
   default-language: Haskell2010
@@ -60,5 +59,5 @@ test-suite word8set-tests
 
   -- test dependencies
   build-depends:
-    , tasty             ^>=1.4.3
+    , tasty             ^>=1.5
     , tasty-quickcheck  ^>=0.10.2
